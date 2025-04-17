@@ -1,17 +1,17 @@
 <template>
   <div style="display: flex; gap: 10px; margin-bottom: 20px;">
     <div>
-      <input type="number" v-model.number="params.price" v-debounce="300" @input="updateField('price')" placeholder="цена" />
+      <input type="number" v-model="params.price" @input="updateField('price')" placeholder="цена" />
       <div>Цена: {{ params.price }}</div>
     </div>
 
     <div>
-      <input type="number" v-model.number="params.qty" v-debounce="300" @input="updateField('qty')" placeholder="количество" />
+      <input type="number" v-model="params.qty" @input="updateField('qty')" placeholder="количество" />
       <div>Кол-во: {{ params.qty }}</div>
     </div>
 
     <div>
-      <input type="number" v-model.number="params.amount" v-debounce="300" @input="updateField('amount')" placeholder="сумма" />
+      <input type="number" v-model="params.amount" @input="updateField('amount')" placeholder="сумма" />
       <div>Сумма: {{ params.amount }}</div>
     </div>
 
@@ -31,6 +31,7 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
+import {debounce} from "./helper/debounce.ts";
 
 type Fields = 'price' | 'qty' | 'amount';
 
@@ -70,12 +71,12 @@ const updateField = (field: 'price' | 'qty' | 'amount') => {
   events.value.unshift(`Изменено поле ${field}: Цена=${params.value.price}, Кол-во=${params.value.qty}, Сумма=${params.value.amount}`)
 }
 
-const recalculation = (field: Fields) => {
+const recalculation = debounce((field: Fields) => {
 
   if (!lastChangedField.value) return lastChangedField.value = field
 
   params.value[lastChangedField.value] = params.value[lastChangedField.value] *  params.value[field]
-}
+}, 300)
 
 const submitData = () => {
   const currentData = {
@@ -111,7 +112,5 @@ const getDataLocaleStorage = () => {
     })
 }
 
-onMounted(() => {
-  getDataLocaleStorage()
-})
+onMounted(() => getDataLocaleStorage())
 </script>
