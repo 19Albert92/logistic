@@ -66,7 +66,7 @@ const updateLocalStorage = () => {
   return data
 }
 
-const updateField = (field: 'price' | 'qty' | 'amount') => {
+const updateField = (field: Fields) => {
   recalculation(field)
   events.value.unshift(`Изменено поле ${field}: Цена=${params.value.price}, Кол-во=${params.value.qty}, Сумма=${params.value.amount}`)
 }
