@@ -1,10 +1,9 @@
 import { createApp } from 'vue'
-// import './style.css'
 import App from './App.vue'
 import debounce from "./helper/debounce.js";
 
 const app = createApp(App)
 
-app.directive('debounce', (el,binding) => debounce(el,binding));
+app.directive('debounce', debounce);
 
 app.mount('#app')

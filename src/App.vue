@@ -1,17 +1,17 @@
 <template>
   <div style="display: flex; gap: 10px; margin-bottom: 20px;">
     <div>
-      <input v-model.number="params.price" v-debounce="300" @input="updateField('price')" placeholder="цена" />
+      <input type="number" v-model.number="params.price" v-debounce="300" @input="updateField('price')" placeholder="цена" />
       <div>Цена: {{ params.price }}</div>
     </div>
 
     <div>
-      <input v-model.number="params.qty" v-debounce="300" @input="updateField('qty')" placeholder="количество" />
+      <input type="number" v-model.number="params.qty" v-debounce="300" @input="updateField('qty')" placeholder="количество" />
       <div>Кол-во: {{ params.qty }}</div>
     </div>
 
     <div>
-      <input v-model.number="params.amount" v-debounce="300" @input="updateField('amount')" placeholder="сумма" />
+      <input type="number" v-model.number="params.amount" v-debounce="300" @input="updateField('amount')" placeholder="сумма" />
       <div>Сумма: {{ params.amount }}</div>
     </div>
 
@@ -34,12 +34,14 @@ import {onMounted, ref} from 'vue'
 
 type Fields = 'price' | 'qty' | 'amount';
 
-const lastChangedField = ref<'price' | 'qty' | 'amount' | null>(null)
+type TParams = Record<Fields, number>;
 
-const params = ref({
-  price: '',
-  qty: '',
-  amount: ''
+const lastChangedField = ref<Fields | null>(null)
+
+const params = ref<TParams>({
+  price: 0,
+  qty: 0,
+  amount: 0
 })
 
 const localStorageData = ref('');
@@ -58,7 +60,7 @@ const updateLocalStorage = () => {
   localStorage.setItem('counter', counter.value.toString())
 
   Object.entries(params.value).forEach(([key, value]) => {
-    localStorage.setItem(key, value)
+    localStorage.setItem(key, value.toString())
   })
   return data
 }
